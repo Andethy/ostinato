@@ -5,3 +5,4 @@ ffmpeg
 pydub
 pysndfx
 librosa
+flask
