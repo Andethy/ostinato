@@ -1,0 +1,7 @@
+midi2audio
+midiutil
+openai
+ffmpeg
+pydub
+pysndfx
+librosa
