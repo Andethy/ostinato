@@ -1,4 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import './App.css';
 
 function Tile({ children }: {children?: ReactNode}) {
@@ -84,6 +86,17 @@ function App() {
             <div>Key signature</div>
             <Dropdown items={keySigs} onChange={index => setKeySigIndex(index)} />
           </Tile>
+          <Tile>
+            <div>Emotion</div>
+            <Dropdown items={emotions} onChange={index => setEmotionIndex(index)} />
+          </Tile>
+          <div className='flex flex-row justify-between'>
+            <div/>
+            <button className='bg-green-300 rounded-full p-4'>
+              Let's go
+              <FontAwesomeIcon className='ml-2' icon={faArrowRight} />
+            </button>
+          </div>
           {/*<button onClick={() => alert(genres[genreIndex] + ' ' + keySigs[keySigIndex] + ' ' + tempo + ' ' + chaosFactor)}>show params</button>*/}
         </div>
         <div className='flex-1 p-4 pl-2'>
