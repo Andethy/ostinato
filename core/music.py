@@ -10,8 +10,8 @@ class Song:
         self.key = key
         self.chaos = chaos
         self.score = Score()
-        self.m_prompts = PromptManager()
-        self.responder = Responder(self.m_prompts)
+        self.prompts = PromptManager()
+        self.responder = Responder(self.prompts)
 
     def compose_track(self, track_name):
         pass
