@@ -35,6 +35,9 @@ BASS_OFFSET = MID_OFFSET - 24
 SUB_OFFSET = MID_OFFSET - 36
 MELODY_OFFSET = MID_OFFSET + 12
 
+INST_DICT= {
+    "high_strings": MID_OFFSET,
+    "low_strings": BASS_OFFSET }
 
 def get_key_notes(root, scale):
     root_int = TONICS_STR[root]
