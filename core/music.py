@@ -7,7 +7,7 @@ from instruments import *
 
 class Song:
 
-    def __init__(self, key, tempo, chaos, tracks):
+    def __init__(self, key, tempo, chaos, tracks, gpt_api_key=None):
         self.tempo = tempo
         self.key = key
         self.chaos = chaos
@@ -15,6 +15,7 @@ class Song:
         self.score = Score()
         self.prompts = PromptManager()
         self.responder = Responder(self.prompts)
+        self.song_complete = False
 
     def compose_track(self, track_name):
         pass

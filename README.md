@@ -14,7 +14,7 @@ _To do: provide an overview and description of high-level functionality and tech
   - [midi](#midi)
   - [audio](#audio)
   - [Genre-specific Classes](#genre-specific-classes)
-- [Backend](#backend)
+- [API](#api)
 - [Frontend](#frontend)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -43,7 +43,7 @@ The `audio` submodule is the final stage in the conversion process, where it int
 
 In addition to the primary submodules, the Core module features a comprehensive suite of classes tailored to various musical genres. These classes are intrinsic to the system's ability to manage genre-specific peculiarities, ensuring accurate and representative audio output across a diverse musical spectrum.
 
-## Backend
+## API
 
 _To do: Provide an overview of the backend part of the application._
 

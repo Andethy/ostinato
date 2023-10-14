@@ -2,8 +2,10 @@ TONICS_STR = {b: a for a, b in enumerate(('C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 
 TONICS_INT = {a: b for a, b in enumerate(('C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'))}
 print(TONICS_STR)
 SCALES = {
+    "major": (0, 2, 4, 5, 7, 9, 11),
     "ionian": (0, 2, 4, 5, 7, 9, 11),
     "aeolian": (0, 2, 3, 5, 7, 8, 10),
+    "minor": (0, 2, 3, 5, 7, 8, 10),
     "dorian": (0, 2, 3, 5, 7, 9, 10),
     "phrygian": (0, 1, 3, 5, 7, 8, 10),
     "harmonic": (0, 2, 3, 5, 7, 8, 11),
@@ -32,3 +34,13 @@ MID_OFFSET = 48
 BASS_OFFSET = MID_OFFSET - 24
 SUB_OFFSET = MID_OFFSET - 36
 MELODY_OFFSET = MID_OFFSET + 12
+
+
+def get_key_notes(root, scale):
+    root_int = TONICS_STR[root]
+    scale_int = SCALES[scale]
+    key_int = list(root_int + sc for sc in scale_int)
+    key_str = []
+    for note in key_int:
+        key_str.append(TONICS_INT[note % 12])
+    return list(TONICS_INT[note % 12] for note in key_int)
