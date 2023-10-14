@@ -7,3 +7,6 @@ class CoreManager:
 
     def __init__(self):
         pass
+
+    def pass_request(self, *args, **kwargs):
+        pass

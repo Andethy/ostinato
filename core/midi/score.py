@@ -1,5 +1,6 @@
 import math
 from entities import *
+from constants import *
 
 
 class KeySignature:
