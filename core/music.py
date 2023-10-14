@@ -1,8 +1,9 @@
-from core.gpt.prompts import *
-from core.gpt.responses import Responder
-from core.instruments import HighStrings, LowStrings
-from core.midi.score import Score
+#from core.gpt.prompts import *
+#from core.gpt.responses import Responder
+#from core.instruments import HighStrings, LowStrings
+#from core.midi.score import Score
 from midi.constants import *
+from instruments import *
 
 class Song:
 
@@ -28,8 +29,9 @@ class Waltz(Song):
         super().__init__(key, tempo, 0.5, (HighStrings(), LowStrings()))
 
     def compose_track(self, instrument):
-        instrument = self.tracks[0]
-        offset = instrument.offset
+        instru = self.tracks[0]
+        offset = instru.offset
+        print(offset)
         track_name = "E|F#|G|B|E|X"
         trackname = track_name.split('|')
         print(trackname)
