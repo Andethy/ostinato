@@ -346,3 +346,5 @@ fabric.properties
 .idea
 
 **/.DS_Store
+
+node_modules/
