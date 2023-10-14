@@ -33,3 +33,6 @@ class LowStrings(MelodicInstrument):
 
     def __init__(self):
         super().__init__("low_strings", BASS_OFFSET)
+
+
+    
