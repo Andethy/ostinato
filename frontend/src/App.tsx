@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { makeRequest } from './api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faChevronDown, faChevronUp, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import './App.css';
 
 /*function getAudioStream(audio: HTMLAudioElement) {
@@ -17,6 +18,31 @@ function Tile({ className, children }: {className?: string, children?: ReactNode
       {children}
     </div>
   );
+}
+
+function DropdownTile({ label, items, onChange }: {label: string, items: string[], onChange?: (index: number) => void}) {
+  const [expanded, setExpanded] = useState(false);
+  const [index, setIndex] = useState(0);
+
+  function onItemClick(index: number) {
+    setIndex(index);
+    //setExpanded(false);
+  }
+
+  return (
+    <div className='bg-slate-200 rounded-xl w-full mb-4 p-2 shadow flex flex-col' onClick={() => setExpanded(!expanded)}>
+      <div className='flex items-center justify-between'>
+        <div className='font-bold'>{label}</div>
+        <div className='flex items-center'>
+          <div>{items[index]}</div>
+          <FontAwesomeIcon icon={expanded ? faChevronUp : faChevronDown} className='pl-2' />
+        </div>
+      </div>
+      <div className={'flex flex-col ' + (expanded ? '' : 'hidden')}>
+        {items.map((item, index) => <button className='text-left bg-slate-100 rounded mt-1 p-1' onClick={() => onItemClick(index)}>{item}</button>)}
+      </div>
+    </div>
+  )
 }
 
 function Dropdown({ items, onChange }: {items: string[], onChange?: (index: number) => void}) {
@@ -59,7 +85,7 @@ function Slider({ min, max, step, onChange }: {min: number, max: number, step: n
 }
 
 function App() {
-  const genres = ['Waltz'];
+  const genres = ['Waltz', 'Hello', 'World'];
   const keySigs = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
   const emotions = ['Happy', 'Sad']
 
@@ -88,6 +114,16 @@ function App() {
     };
   }, []);
 
+  function onLetsGoClicked() {
+    makeRequest({
+      tempo: tempo,
+      genre: genres[genreIndex],
+      key_signature: keySigs[keySigIndex],
+      chaos_factor: chaosFactor,
+      emotion: emotions[emotionIndex]
+    });
+  }
+
   return (
     <div className='App'>
       <div className='w-full p-4 shadow-md flex items-center justify-between'>
@@ -96,29 +132,24 @@ function App() {
       </div>
       <div className='flex flex-col md:flex-row w-3/5 m-auto'>
         <div className='flex-1 p-4 pr-2'>
-          <Tile>
+          {/*<Tile>
             <div>Genre</div>
             <Dropdown items={genres} onChange={index => setGenreIndex(index)} />
-          </Tile>
+          </Tile>*/}
+          <DropdownTile label='Genre' items={genres} onChange={index => setGenreIndex(index)} />
           <Tile>
-            <div>Tempo</div>
+            <div className='font-bold'>Tempo</div>
             <Slider min={60} max={180} step={1} onChange={value => setTempo(value)} />
           </Tile>
           <Tile>
-            <div>Chaos factor</div>
+            <div className='font-bold'>Chaos factor</div>
             <Slider min={0} max={1} step={0.001} onChange={value => setChaosFactor(value)} />
           </Tile>
-          <Tile>
-            <div>Key signature</div>
-            <Dropdown items={keySigs} onChange={index => setKeySigIndex(index)} />
-          </Tile>
-          <Tile>
-            <div>Emotion</div>
-            <Dropdown items={emotions} onChange={index => setEmotionIndex(index)} />
-          </Tile>
+          <DropdownTile label='Key signature' items={keySigs} onChange={index => setKeySigIndex(index)} />
+          <DropdownTile label='Emotion' items={emotions} onChange={index => setEmotionIndex(index)} />
           <div className='flex flex-row justify-between'>
             <div/>
-            <button className='bg-green-300 rounded-full p-4'>
+            <button className='bg-green-300 rounded-full p-4' onClick={onLetsGoClicked}>
               Let's go
               <FontAwesomeIcon className='ml-2' icon={faArrowRight} />
             </button>

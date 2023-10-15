@@ -6,3 +6,4 @@ pydub
 pysndfx
 librosa
 flask
+flask-cors
