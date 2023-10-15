@@ -1,3 +1,4 @@
+from constants import PATH_TO_MID
 from core.gpt.prompts import *
 from core.gpt.responses import Responder
 from core.instruments import HighStrings, LowStrings
@@ -30,8 +31,8 @@ class Song:
 
 class Waltz(Song):
 
-    def __init__(self, root, emotion, tempo, *args, **kwargs):
-        super().__init__(root, emotion, tempo, 0.5, (HighStrings(), LowStrings()))
+    def __init__(self, root, emotion, tempo, chaos=0.5, *args, **kwargs):
+        super().__init__(root, emotion, tempo, chaos, (HighStrings(), LowStrings()))
 
     def compose_track(self, inst_index):
         inst = self.tracks[inst_index]
@@ -60,7 +61,7 @@ class Waltz(Song):
                 print("FINAL TIME:", note.time)
         print(self.score())
         self.midFile.add_notes(self.score())
-        self.midFile.save_file('opt')
+        self.midFile.save_file(PATH_TO_MID)
 
 
     def make_ostinato(self, inst, notes):
