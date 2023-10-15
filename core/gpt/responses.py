@@ -9,7 +9,7 @@ class Responder:
     def __init__(self, prompter: PromptManager, key=None):
         self.prompter = prompter
         self.__key = os.getenv('GPT_API_KEY') if key is None else key
-        # openai.api_key = self.__key
+        openai.api_key = self.__key
 
     def get_response(self, prompt):
         response = openai.Completion.create(
