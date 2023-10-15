@@ -32,9 +32,9 @@ class Song:
 
 
 class Waltz(Song):
-    #manager.py line 19 passes in the following arguments to the Waltz constructor.
-    #self.song = Waltz(key_signature, emotion, tempo, chaos_factor) #waltz takesgpt api keytracks, key and tempo for now.
-    def __init__(self, root, emotion, tempo, chaos=0.5, *args, **kwargs): 
+    # manager.py line 19 passes in the following arguments to the Waltz constructor.
+    # self.song = Waltz(key_signature, emotion, tempo, chaos_factor) #waltz takesgpt api keytracks, key and tempo for now.
+    def __init__(self, root, emotion, tempo, chaos=0.5, *args, **kwargs):
         self.measures = 8
         inst1 = HighStringsStaccato() if chaos > 0.5 else HighStringsPizzicato()
         if chaos > 0.75:
@@ -44,12 +44,38 @@ class Waltz(Song):
 
     def compose_song(self):
         self.compose_track1(0)
+        # self.compose_track2(1)
         self.midFile.add_notes(self.score())
         self.midFile.save_file(PATH_TO_MID)
         self.mp3File.add_samples(self.score(), self.tracks, self.tempo)
         self.mp3File.export_file(PATH_TO_MP3)
 
     def compose_track1(self, inst_index):
+        inst = self.tracks[inst_index]
+        self.score.add_track(inst.name)
+        self.midFile.add_tracks([self.score.get_last_track()])
+        self.mp3File.add_tracks([self.score.get_last_track()])
+
+        self.prompter.prompts['ost1'] = OstinatoPrompt(self.root, self.emotion, 6)
+        flag = False
+        response1 = None
+        while not flag:
+            response1_pre = self.responder.get_response('ost1')
+            response1_post = self.prompter.parse_prompt_by_name('ost1', response1_pre)
+            print("OSTINATO RESPONSE:", response1_post)
+            if len(response1_post.split('|')) == 6:
+                flag = True
+                response1 = response1_post
+        print(response1)
+        ost1 = self.make_ostinato(inst, response1)
+
+        print(ost1)
+        measures = Measure.create_duplicate_measures(ost1, 8)
+        print("NOTES: ", measures[1].get_notes())
+        self.score.add_to_track(inst.name, measures)
+        print(self.score())
+
+    def compose_track2(self, inst_index):
         inst = self.tracks[inst_index]
         self.score.add_track(inst.name)
         self.midFile.add_tracks([self.score.get_last_track()])
@@ -105,20 +131,21 @@ class Waltz(Song):
             #         ostinato_notes[len(ostinato_notes) - 1] -= 12
         return ostinato_notes
 
-    def make_chord(self, note):
+    @staticmethod
+    def make_chord(inst, notes):
         chord = HARMONIES["major-triad"]
-        if "m" in note:
+        if "m" in notes:
             chord = HARMONIES["minor-triad"]
-            note = note[:-1]
+            notes = notes[:-1]
         chord = list(chord)
-        value = TONICS_STR[note]
+        value = TONICS_STR[notes]
         for i in range(len(chord)):
             chord[i] += value
-        placeholder = [[0], [], [1, 2], [], [1, 2], []]
-        for x in range(len(placeholder)):
-            for y in range(len(placeholder[x])):
-                placeholder[x][y] = chord[placeholder[x][y]]
-        print(placeholder)
+        chord_map = [[0], [], [1, 2], [], [1, 2], []]
+        for x in range(len(chord_map)):
+            for y in range(len(chord_map[x])):
+                chord_map[x][y] = chord[chord_map[x][y]]
+        print(chord_map)
 
     def create_section(self):
         pass
