@@ -49,7 +49,7 @@ class OstinatoPrompt(Prompt):
         self.prompt.append(f'Separate each note with "{SEPERATOR}"')
         self.prompt.append(f'Do not include dashes and in place of a note put a "{STANDARD_REST}" if there is a rest')
         self.prompt.append(f'Each note is the length of a 1/8th note')
-        self.prompt.append(f'Create a total of EXACTLY {num_notes} [note]s')
+        self.prompt.append(f'Create a total of EXACTLY {num_notes} [note]s, including rests')
 
     def parse_result(self, result: str):
         # result = result.replace(' ', '').replace('\n', '').replace('"', '')
