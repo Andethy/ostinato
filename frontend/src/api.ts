@@ -7,7 +7,7 @@ type OstinatoRequest = {
 }
 
 export async function makeRequest(body: OstinatoRequest) {
-  const response = await fetch('http://localhost:5000/ostinato_home', {
+  const response = await fetch(process.env.REACT_APP_BACKEND_URL + '/ostinato_home', {
     method: 'POST',
     headers: {
       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,/;q=0.8,application/signed-exchange;v=b3;q=0.7',

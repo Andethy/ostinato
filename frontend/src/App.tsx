@@ -149,7 +149,7 @@ function App() {
       chaos_factor: chaosFactor,
       emotion: emotions[emotionIndex].toLowerCase()
     }).then(json => {
-      const audio = new Audio('http://localhost:5000/static/' + json.path);
+      const audio = new Audio(process.env.REACT_APP_BACKEND_URL + '/static/' + json.path);
       audio.crossOrigin = 'anonymous';
       audio.loop = true;
       setAudio(audio);
