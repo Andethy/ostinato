@@ -6,7 +6,7 @@ class CoreManager:
     def __init__(self):
         self.song = None
 
-    def pass_request(self, *args, **kwargs) -> int:
+    def pass_request(self, tempo, genre, chaos_factor, key_signature, emotion) -> int:
         """
         Passes in form info from the backend to the core program and triggers the algorithm.
 
@@ -14,9 +14,8 @@ class CoreManager:
         :param kwargs: key word arguments
         :return:
         """
-        kwargs['genre'] = 'waltz'
-        if kwargs['genre'] == 'waltz':
-            self.song = Waltz(*args)
+        if genre == 'waltz':
+            self.song = Waltz(*args) #waltz takesgpt api keytracks, key and tempo for now.
         return 0
 
     def get_mp3(self) -> Path:
