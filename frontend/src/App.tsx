@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { makeRequest } from './api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faChevronDown, faChevronUp, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faChevronDown, faChevronUp, faDownload, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { Wave } from '@foobar404/wave';
 import './App.css';
 
@@ -205,6 +205,12 @@ function App() {
               <div/>
             </div>
           </Tile>
+          {audio && <Tile>
+              <div className='text-bold'>Export as MP3</div>
+              <a href={audio.src}>
+                <FontAwesomeIcon icon={faDownload} />
+              </a>
+          </Tile>}
         </div>
       </div>
     </div>
