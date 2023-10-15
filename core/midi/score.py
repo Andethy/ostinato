@@ -112,12 +112,9 @@ class Track:
 
     def sync_notes_to_track(self, beats):
         for index, measure in enumerate(self._measures):
-            print("MEASURE", index, "|",index * beats)
             for note in measure.get_notes():
                 note.assign_track(self.index)
-                print("--OLD",note.time)
                 note.offset_position(index * beats)
-                print("--NEW",note.time)
 
     def get_measures(self):
         return self._measures

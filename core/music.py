@@ -36,18 +36,20 @@ class Waltz(Song):
     #self.song = Waltz(key_signature, emotion, tempo, chaos_factor) #waltz takesgpt api keytracks, key and tempo for now.
     def __init__(self, root, emotion, tempo, chaos=0.5, *args, **kwargs): 
         self.measures = 8
-        inst1 = HighStringsStaccato() if chaos > 0.5 else HighStringsPizzicato
+        inst1 = HighStringsStaccato() if chaos > 0.5 else HighStringsPizzicato()
+        if chaos > 0.75:
+            inst1.offset += 12
         super().__init__(root, emotion, tempo, chaos,
                          (inst1, LowStringsStaccato()), ticks_to_ms(self.measures * 3, tempo))
 
     def compose_song(self):
-        self.compose_track(0)
+        self.compose_track1(0)
         self.midFile.add_notes(self.score())
         self.midFile.save_file(PATH_TO_MID)
         self.mp3File.add_samples(self.score(), self.tracks, self.tempo)
         self.mp3File.export_file(PATH_TO_MP3)
 
-    def compose_track(self, inst_index):
+    def compose_track1(self, inst_index):
         inst = self.tracks[inst_index]
         self.score.add_track(inst.name)
         self.midFile.add_tracks([self.score.get_last_track()])
@@ -67,12 +69,9 @@ class Waltz(Song):
         ost1 = self.make_ostinato(inst, response1)
 
         print(ost1)
-        measures = Measure.create_duplicate_measures(ost1, 16)
+        measures = Measure.create_duplicate_measures(ost1, 8)
         print("NOTES: ", measures[1].get_notes())
         self.score.add_to_track(inst.name, measures)
-        for measure in self.score.get_tracks()[0].get_measures():
-            for note in measure.get_notes():
-                print("FINAL TIME:", note.time)
         print(self.score())
 
     @staticmethod
@@ -126,5 +125,5 @@ class Waltz(Song):
 
 
 if __name__ == '__main__':
-    waltz = Waltz("G#", "happy", 60, 0.7)
+    waltz = Waltz("G#", "sad", 132, 0.8)
     waltz.compose_song()
