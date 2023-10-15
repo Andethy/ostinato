@@ -1,9 +1,9 @@
 from core.audio.constants import ticks_to_ms
 from core.audio.file import MP3File
-from core.constants import PATH_TO_MID
+from core.constants import PATH_TO_MID, PATH_TO_MP3
 from core.gpt.prompts import *
 from core.gpt.responses import Responder
-from core.instruments import HighStrings, LowStrings
+from core.instruments import HighStringsPizzicato, LowStringsStaccato, HighStringsStaccato
 from core.midi.score import Score, Measure
 from core.midi.constants import *
 from core.midi.file import MIDIFile
@@ -18,13 +18,13 @@ class Song:
         self.chaos = chaos
         self.tracks = tracks
         self.score = Score()
-        self.midFile = MIDIFile(len(tracks))
+        self.midFile = MIDIFile(num_tracks=len(tracks))
         self.mp3File = MP3File(length=track_length + 5000)
         self.prompter = PromptManager()
         self.responder = Responder(self.prompter)
         self.song_complete = False
 
-    def compose_track(self, track_name):
+    def compose_song(self):
         pass
 
     def write_ostinato(self):
@@ -35,13 +35,22 @@ class Waltz(Song):
 
     def __init__(self, root, emotion, tempo, chaos=0.5, *args, **kwargs):
         self.measures = 8
+        inst1 = HighStringsStaccato() if chaos > 0.5 else HighStringsPizzicato
         super().__init__(root, emotion, tempo, chaos,
-                         (HighStrings(), LowStrings()), ticks_to_ms(self.measures * 3, tempo))
+                         (inst1, LowStringsStaccato()), ticks_to_ms(self.measures * 3, tempo))
+
+    def compose_song(self):
+        self.compose_track(0)
+        self.midFile.add_notes(self.score())
+        self.midFile.save_file(PATH_TO_MID)
+        self.mp3File.add_samples(self.score(), self.tracks, self.tempo)
+        self.mp3File.export_file(PATH_TO_MP3)
 
     def compose_track(self, inst_index):
         inst = self.tracks[inst_index]
         self.score.add_track(inst.name)
-        self.midFile.add_tracks(self.score.get_tracks())
+        self.midFile.add_tracks([self.score.get_last_track()])
+        self.mp3File.add_tracks([self.score.get_last_track()])
 
         self.prompter.prompts['ost1'] = OstinatoPrompt(self.root, self.emotion, 6)
         flag = False
@@ -64,8 +73,6 @@ class Waltz(Song):
             for note in measure.get_notes():
                 print("FINAL TIME:", note.time)
         print(self.score())
-        self.midFile.add_notes(self.score())
-        self.midFile.save_file(PATH_TO_MID)
 
     @staticmethod
     def make_ostinato(inst, notes):
@@ -118,5 +125,5 @@ class Waltz(Song):
 
 
 if __name__ == '__main__':
-    waltz = Waltz("A", "happy", 120)
-    waltz.compose_track(0)
+    waltz = Waltz("G#", "happy", 60, 0.7)
+    waltz.compose_song()

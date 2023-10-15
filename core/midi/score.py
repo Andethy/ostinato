@@ -138,6 +138,9 @@ class Score:
     def get_tracks(self):
         return self._tracks
 
+    def get_last_track(self):
+        return self._tracks[len(self._tracks) - 1]
+
     def add_to_track(self, track_name, measures):
         track = None
         for tr in self._tracks:

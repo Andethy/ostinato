@@ -32,7 +32,7 @@ class MIDIFile:
 
     def save_file(self, file_path):
         # full_path = Path(file_path, 'output.midi') if '.' not in file_path else file_path
-        full_path = file_path + name + '.mid'
+        full_path = file_path + self.name + '.mid'
         with open(full_path, "wb") as out:
             self.file.writeFile(out)
 
