@@ -6,7 +6,8 @@ from core.audio.file import MP3File
 from core.constants import PATH_TO_MID, PATH_TO_MP3
 from core.gpt.prompts import *
 from core.gpt.responses import Responder
-from core.instruments import HighStringsPizzicato, LowStringsStaccato, HighStringsStaccato, LowStringsPizzicato
+from core.instruments import HighStringsPizzicato, LowStringsStaccato, HighStringsStaccato, LowStringsPizzicato, \
+    Instrument
 from core.midi.score import Score, Measure
 from core.midi.constants import *
 from core.midi.file import MIDIFile
@@ -38,6 +39,7 @@ class Waltz(Song):
     # manager.py line 19 passes in the following arguments to the Waltz constructor.
     # self.song = Waltz(key_signature, emotion, tempo, chaos_factor) #waltz takesgpt api keytracks, key and tempo for now.
     def __init__(self, root, emotion, tempo, chaos=0.5, *args, **kwargs):
+        Instrument.inst_count = 0
         self.measures = 8
         inst1 = HighStringsStaccato() if chaos + random() * 0.5 > 1. else HighStringsPizzicato()
         inst2 = LowStringsStaccato() if chaos + random() * 0.5 > 1.25 else LowStringsPizzicato()
