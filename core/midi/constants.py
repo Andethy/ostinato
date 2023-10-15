@@ -35,14 +35,15 @@ BASS_OFFSET = MID_OFFSET - 24
 SUB_OFFSET = MID_OFFSET - 36
 MELODY_OFFSET = MID_OFFSET + 12
 
-INST_DICT= {
+INST_DICT = {
     "high_strings": MID_OFFSET,
-    "low_strings": BASS_OFFSET }
+    "low_strings": BASS_OFFSET}
 
 ACCOMPANIMENTS = {"waltz": ([[0], [], [1, 2], [], [1, 2], []],
                             [[0], [], [2], [1], [2], []],
                             [[0], [], [2], [1], [2], []],
                             [[0], [], [1, 2], [], [1], []])}
+
 
 def get_key_notes(root, scale):
     root_int = TONICS_STR[root]
