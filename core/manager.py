@@ -31,7 +31,7 @@ class CoreManager:
         if not self.song.song_complete:
             return Path()
 
-        return self.song.mp3File.name
+        return self.song.mp3File.name + '.mp3'
 
     def get_midi(self) -> Path:
         """
