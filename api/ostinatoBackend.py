@@ -39,6 +39,7 @@ def ostinato_home():
     x = core_instance.pass_request(tempo, genre, chaos_factor, key_signature, emotion)
     count = 0
     while x != 0 and count < 5:
+        print("hellooo", x)
         x = core_instance.pass_request(tempo, genre, chaos_factor, key_signature, emotion)
         count += 1
     

@@ -23,7 +23,7 @@ class Song:
         self.midFile = MIDIFile(num_tracks=len(tracks))
         self.mp3File = MP3File(length=track_length + 1500)
         self.prompter = PromptManager()
-        self.responder = Responder(self.prompter)
+        self.responder = Responder(self.prompter, None)
         self.song_complete = False
 
     def compose(self):
@@ -55,6 +55,7 @@ class Waltz(Song):
         self.midFile.save_file(PATH_TO_MID)
         self.mp3File.add_samples(self.score(), self.tracks, self.tempo)
         self.mp3File.export_file(PATH_TO_MP3)
+        self.song_complete = True
 
     def compose_track1(self, inst_index):
         inst = self.tracks[inst_index]

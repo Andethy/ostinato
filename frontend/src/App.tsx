@@ -137,10 +137,10 @@ function App() {
   function onLetsGoClicked() {
     makeRequest({
       tempo: tempo,
-      genre: genres[genreIndex],
+      genre: genres[genreIndex].toLowerCase(),
       key_signature: keySigs[keySigIndex],
       chaos_factor: chaosFactor,
-      emotion: emotions[emotionIndex]
+      emotion: emotions[emotionIndex].toLowerCase()
     }).then(json => {
       const audio = new Audio(json.path);
       audio.crossOrigin = 'anonymous';

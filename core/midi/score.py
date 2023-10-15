@@ -81,7 +81,7 @@ class Measure:
 
 
 class Track:
-    _measures: list[Measure]
+    #_measures: list[Measure]
 
     def __init__(self, name, index=0):
         self.index = index
@@ -121,7 +121,7 @@ class Track:
 
 
 class Score:
-    _tracks: list[Track]
+    #_tracks: list[Track]
 
     def __init__(self, time_signature=3):
         self._tracks = []
