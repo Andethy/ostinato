@@ -1,4 +1,6 @@
 import os.path
+import random
+from datetime import datetime
 
 from pydub import AudioSegment
 from pydub.playback import play
@@ -25,6 +27,7 @@ class MP3File:
 
     def __init__(self, name='output', length=0):
         self.name = name
+        self.path = ''
         self.length = length
         self.stems = []
 
@@ -44,4 +47,6 @@ class MP3File:
             base = base.overlay(stem.audio, 0)
         base.apply_gain(18.0)
         play(base)
-        base.export(path + f'/{self.name}.mp3')
+        self.name = self.name + datetime.now().strftime("-%Y_%m_%d-%H_%M_%S-") + str(random.randint(10, 100))
+        self.path = path + f'/{self.name}.mp3'
+        base.export(self.path)
