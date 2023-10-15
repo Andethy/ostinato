@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { makeRequest } from './api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import './App.css';
@@ -88,6 +89,15 @@ function App() {
     };
   }, []);
 
+  function onLetsGoClicked() {
+    makeRequest({
+      tempo: tempo,
+      genre: genres[genreIndex],
+      key_signature: keySigs[keySigIndex],
+      chaos_factor: chaosFactor
+    });
+  }
+
   return (
     <div className='App'>
       <div className='w-full p-4 shadow-md flex items-center justify-between'>
@@ -118,7 +128,7 @@ function App() {
           </Tile>
           <div className='flex flex-row justify-between'>
             <div/>
-            <button className='bg-green-300 rounded-full p-4'>
+            <button className='bg-green-300 rounded-full p-4' onClick={onLetsGoClicked}>
               Let's go
               <FontAwesomeIcon className='ml-2' icon={faArrowRight} />
             </button>
