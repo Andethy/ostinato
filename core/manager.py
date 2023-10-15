@@ -16,7 +16,7 @@ class CoreManager:
         :return:
         """
         if genre == 'waltz':
-            self.song = Waltz(*args) #waltz takesgpt api keytracks, key and tempo for now.
+            self.song = Waltz(key_signature, emotion, tempo, chaos_factor) #waltz takesgpt api keytracks, key and tempo for now.
         return 0
 
     def get_mp3(self) -> Path:

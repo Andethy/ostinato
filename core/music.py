@@ -30,8 +30,9 @@ class Song:
 
 
 class Waltz(Song):
-
-    def __init__(self, root, emotion, tempo, chaos=0.5, *args, **kwargs):
+    #manager.py line 19 passes in the following arguments to the Waltz constructor.
+    #self.song = Waltz(key_signature, emotion, tempo, chaos_factor) #waltz takesgpt api keytracks, key and tempo for now.
+    def __init__(self, root, emotion, tempo, chaos=0.5, *args, **kwargs): 
         super().__init__(root, emotion, tempo, chaos, (HighStrings(), LowStrings()))
 
     def compose_track(self, inst_index):
