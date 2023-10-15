@@ -1,7 +1,7 @@
-#from core.gpt.prompts import *
-#from core.gpt.responses import Responder
-#from core.instruments import HighStrings, LowStrings
-#from core.midi.score import Score
+from core.gpt.prompts import *
+from core.gpt.responses import Responder
+from core.instruments import HighStrings, LowStrings
+from core.midi.score import Score
 from midi.constants import *
 from instruments import *
 
@@ -50,17 +50,30 @@ class Waltz(Song):
                     track.append((TONICS_STR[trackname[i]]+offset) * count)
                
         print(track)
-    compose_track("self", "high_strings")
+    #compose_track("self", "high_strings")
 
     def make_ostinato(self):
         pass
 
     def make_chord(self, note):
         chord = HARMONIES["major-triad"]
-        if m in note:
+        if "m" in note:
             chord = HARMONIES["minor-triad"] 
             note=note[:-1]
-        value = TONICS_STR[]
+        chord = list(chord)
+        value = TONICS_STR[note]
+        for i in range(len(chord)):
+            chord[i] += value
+        placeholder= [[0],[],[1,2],[],[1,2],[]]
+        for x in range(len(placeholder)):
+            if placeholder[x] != []:
+                for y in range(len(placeholder[x])):
+                    placeholder[x][y] = chord[placeholder[x][y]]
+        print(placeholder)
     
     def create_section(self):
         pass
+
+    if __name__ == '__main__' :
+        pass
+
