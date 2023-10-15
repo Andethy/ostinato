@@ -1,8 +1,10 @@
 from core.gpt.prompts import *
 from core.gpt.responses import Responder
 from core.instruments import HighStrings, LowStrings
-from core.midi.score import Score
+from core.midi.score import Score, Measure
 from midi.constants import *
+from midi.file import MIDIFile
+
 
 class Song:
 
@@ -13,6 +15,8 @@ class Song:
         self.chaos = chaos
         self.tracks = tracks
         self.score = Score()
+        self.midFile = MIDIFile(len(tracks))
+        self.mp3File = None  # TODO
         self.prompter = PromptManager()
         self.responder = Responder(self.prompter)
         self.song_complete = False
@@ -30,54 +34,84 @@ class Waltz(Song):
         super().__init__(root, emotion, tempo, 0.5, (HighStrings(), LowStrings()))
 
     def compose_track(self, inst_index):
-        self.prompter.prompts['ost1'] = OstinatoPrompt(self.root, self.emotion, 6)
-        response1_pre = self.responder.get_response('ost1')
-        response1_post = self.prompter.parse_prompt_by_name('ost1', response1_pre)
-        print("OSTINATO RESPONSE:", response1_post)
-        self.make_ostinato(inst_index, response1_post)
-
-    def make_ostinato(self, inst_index, notes):
         inst = self.tracks[inst_index]
+        self.score.add_track(inst.name)
+        self.midFile.add_tracks(self.score.get_tracks())
+
+        self.prompter.prompts['ost1'] = OstinatoPrompt(self.root, self.emotion, 6)
+        flag = False
+        response1 = None
+        while not flag:
+            response1_pre = self.responder.get_response('ost1')
+            response1_post = self.prompter.parse_prompt_by_name('ost1', response1_pre)
+            print("OSTINATO RESPONSE:", response1_post)
+            if len(response1_post.split('|')) == 6:
+                flag = True
+                response1 = response1_post
+        print(response1)
+        ost1 = self.make_ostinato(inst, response1)
+
+        print(ost1)
+        measures = Measure.create_duplicate_measures(ost1, 8)
+        print("NOTES: ", measures[1].get_notes())
+        self.score.add_to_track(inst.name, measures)
+        for measure in self.score.get_tracks()[0].get_measures():
+            for note in measure.get_notes():
+                print("FINAL TIME:", note.time)
+        print(self.score())
+        self.midFile.add_notes(self.score())
+        self.midFile.save_file('opt')
+
+
+    def make_ostinato(self, inst, notes):
         offset = inst.offset
         notes_split = notes.split('|')
         print(notes_split)
-        track = []
+        ostinato_notes = []
         for i in range(len(notes_split)):
+            if notes_split[i] == '':
+                continue
             count = 1
-            track.append([])
+            ostinato_notes.append([])
             if i != len(notes_split) - 1:
                 while notes_split[i] == notes_split[i + 1]:
-                    i += 1
+                    pass
+                    # i += 1
                     # count = count + 1
                 if notes_split[i] != "X":
-                    track[len(track) - 1].append((TONICS_STR[notes_split[i]] + offset))
+                    ostinato_notes[len(ostinato_notes) - 1].append((TONICS_STR[notes_split[i]] + offset))
                     print(TONICS_STR[notes_split[i]])
             else:
                 # count = count + 1
                 if notes_split[i] != "X":
-                    track[len(track) - 1].append((TONICS_STR[notes_split[i]] + offset))
+                    ostinato_notes[len(ostinato_notes) - 1].append((TONICS_STR[notes_split[i]] + offset))
 
-        print(track)
+            # if i > 0:
+            #     if ostinato_notes[len(ostinato_notes) - 1][0] + 12 < ostinato_notes[len(ostinato_notes) - 2][0]:
+            #         ostinato_notes[len(ostinato_notes) - 1] += 12
+            #     elif ostinato_notes[len(ostinato_notes) - 1][0] - 12 > ostinato_notes[len(ostinato_notes) - 2][0]:
+            #         ostinato_notes[len(ostinato_notes) - 1] -= 12
+        return ostinato_notes
 
     def make_chord(self, note):
         chord = HARMONIES["major-triad"]
         if "m" in note:
             chord = HARMONIES["minor-triad"]
-            note=note[:-1]
+            note = note[:-1]
         chord = list(chord)
         value = TONICS_STR[note]
         for i in range(len(chord)):
             chord[i] += value
-        placeholder= [[0],[],[1,2],[],[1,2],[]]
+        placeholder = [[0], [], [1, 2], [], [1, 2], []]
         for x in range(len(placeholder)):
             for y in range(len(placeholder[x])):
                 placeholder[x][y] = chord[placeholder[x][y]]
         print(placeholder)
-    
+
     def create_section(self):
         pass
 
 
 if __name__ == '__main__':
-    waltz = Waltz("E","sad", 120)
+    waltz = Waltz("A", "happy", 120)
     waltz.compose_track(0)

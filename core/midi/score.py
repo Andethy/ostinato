@@ -1,4 +1,6 @@
 import math
+from copy import copy
+
 from core.midi.entities import *
 from core.midi.constants import *
 
@@ -60,18 +62,37 @@ class Measure:
                 notes.append(entity)
         return notes
 
+    @staticmethod
+    def create_duplicate_measures(sequence, count, sub=2):
+
+        measures = []
+        for n in range(count):
+            notes = []
+            for index, pitches in enumerate(sequence):
+                if len(pitches) == 0:
+                    continue
+                for pitch in pitches:
+                    notes.append(Note(pitch, time=index/sub))
+            measures.append(Measure(*notes))
+
+        return measures
+
+
+
+
 
 class Track:
     _measures: list[Measure]
 
-    def __init__(self, name):
-        self._name = name
+    def __init__(self, name, index=0):
+        self.index = index
+        self.name = name
         self._measures = []
         self._pen = -1
 
-    def append_measures(self, number=1):
-        for n in range(number):
-            self._measures.append(Measure())
+    def append_measures(self, measures):
+        for n in range(len(measures)):
+            self._measures.append(measures[n])
 
     def set_pen(self, number=0, auto=False):
         if auto:
@@ -90,22 +111,41 @@ class Track:
         except IndexError:
             print(f"Measure number {measure} is out of range of the score.")
 
-    def assign_notes_to_track(self):
+    def sync_notes_to_track(self, beats):
         for index, measure in enumerate(self._measures):
+            print("MEASURE", index, "|",index * beats)
             for note in measure.get_notes():
-                note.assign_track(self._name)
-                note.offset_position(index * 4.0)
+                note.assign_track(self.index)
+                print("--OLD",note.time)
+                note.offset_position(index * beats)
+                print("--NEW",note.time)
+
+    def get_measures(self):
+        return self._measures
 
 
 class Score:
     _tracks: list[Track]
 
-    def __init__(self):
+    def __init__(self, time_signature=3):
         self._tracks = []
         self._writer_number = -1
+        self.time_signature = time_signature
 
     def add_track(self, name):
-        self._tracks.append(Track(name))
+        self._tracks.append(Track(name, len(self._tracks)))
+
+    def get_tracks(self):
+        return self._tracks
+
+    def add_to_track(self, track_name, measures):
+        track = None
+        for tr in self._tracks:
+            if track_name == tr.name:
+                track = tr
+                break
+        track.append_measures(measures)
+        track.sync_notes_to_track(self.time_signature)
 
     def set_writer(self, number):
         try:
@@ -120,6 +160,21 @@ class Score:
 
     def get_index_by_name(self, track_name):
         return self._tracks.index(track_name)
+
+    def __call__(self, *args, **kwargs):
+        notes = []
+        n = 0
+        for track in self._tracks:
+            for measure in track.get_measures():
+                n += 1
+
+                notes += measure.get_notes()
+                # print(f"NOTE {n} START POS:", measure.get_notes()[0].time)
+                # print(f"NOTE {n} START POS:", measure.get_notes()[1].time)
+                # print(f"NOTE {n} START POS:", measure.get_notes()[2].time)
+        return notes
+
+
 
 
 if __name__ == '__main__':

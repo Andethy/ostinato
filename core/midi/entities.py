@@ -4,7 +4,7 @@ from core.midi.constants import *
 class Note:
     def __init__(self,
                  value: int,
-                 duration: float = 4.,
+                 duration: float = .5,
                  time: float = 0.,
                  velocity: int = 75,
                  track: str = '0',
@@ -32,8 +32,8 @@ class Note:
     def get_note_value(self):
         return TONICS_INT[self.value % 12] + str(self.value // 12 - 2)
 
-    def assign_track(self, track_name):
-        self.track = track_name
+    def assign_track(self, track_index):
+        self.track = track_index
 
     def offset_position(self, position):
         self.time += position
