@@ -7,6 +7,13 @@ class CoreManager:
         self.song = None
 
     def pass_request(self, *args, **kwargs) -> int:
+        """
+        Passes in form info from the backend to the core program and triggers the algorithm.
+
+        :param args: arguments
+        :param kwargs: key word arguments
+        :return:
+        """
         kwargs['genre'] = 'waltz'
         if kwargs['genre'] == 'waltz':
             self.song = Waltz(*args)
