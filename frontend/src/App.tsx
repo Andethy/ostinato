@@ -15,7 +15,7 @@ import './App.css';
 
 function Tile({ className, children }: {className?: string, children?: ReactNode}) {
   return (
-    <div className={'bg-slate-200 rounded-xl w-full mb-4 p-2 shadow flex items-center justify-between ' + (className || '')}>
+    <div className={'bg-slate-200 dark:bg-slate-900 rounded-xl w-full mb-4 p-2 shadow flex items-center justify-between ' + (className || '')}>
       {children}
     </div>
   );
@@ -31,7 +31,7 @@ function DropdownTile({ label, items, onChange }: {label: string, items: string[
   }
 
   return (
-    <div className='bg-slate-200 rounded-xl w-full mb-4 p-2 shadow flex flex-col' onClick={() => setExpanded(!expanded)}>
+    <div className='bg-slate-200 dark:bg-slate-900 rounded-xl w-full mb-4 p-2 shadow flex flex-col' onClick={() => setExpanded(!expanded)}>
       <div className='flex items-center justify-between'>
         <div className='font-bold'>{label}</div>
         <div className='flex items-center'>
@@ -40,7 +40,7 @@ function DropdownTile({ label, items, onChange }: {label: string, items: string[
         </div>
       </div>
       <div className={'flex flex-col ' + (expanded ? '' : 'hidden')}>
-        {items.map((item, index) => <button className='text-left bg-slate-100 rounded mt-1 p-1' onClick={() => onItemClick(index)}>{item}</button>)}
+        {items.map((item, index) => <button className='text-left bg-slate-100 dark:bg-slate-800 rounded mt-1 p-1' onClick={() => onItemClick(index)}>{item}</button>)}
       </div>
     </div>
   )
@@ -138,8 +138,8 @@ function App() {
   }
 
   return (
-    <div className='App'>
-      <div className='w-full p-4 shadow-md flex items-center justify-between'>
+    <div className='App h-full dark:text-white'>
+      <div className='w-full p-4 flex items-center justify-between'>
         <h1 className='font-bold text-xl'>ostinato</h1>
         <div/>
       </div>
@@ -168,7 +168,7 @@ function App() {
           <DropdownTile label='Emotion' items={emotions} onChange={index => setEmotionIndex(index)} />
           <div className='flex flex-row justify-between'>
             <div/>
-            <button className='bg-green-300 rounded-full p-4 w-full md:w-auto' onClick={onLetsGoClicked}>
+            <button className='bg-green-300 text-black rounded-full p-4 w-full md:w-auto' onClick={onLetsGoClicked}>
               Let's go
               <FontAwesomeIcon className='ml-2' icon={faArrowRight} />
             </button>
