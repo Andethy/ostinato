@@ -3,7 +3,7 @@ from core.midi.constants import get_key_notes, TONICS_STR
 
 
 class Prompt:
-    prompt: list[str]
+    #prompt: list[str]
 
     def __init__(self, *args, **kwargs):
         self.prompt = []
@@ -82,7 +82,7 @@ class OstinatoPrompt(Prompt):
 
 
 class PromptManager:
-    prompts: dict[str, Prompt]
+    #prompts: dict[str, Prompt]
 
     def __init__(self):
         self.prompts = {}

@@ -23,7 +23,7 @@ class MP3Stem:
 
 
 class MP3File:
-    stems: list[MP3Stem]
+    #stems: list[MP3Stem]
 
     def __init__(self, name='output', length=0):
         self.name = name
