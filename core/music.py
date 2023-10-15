@@ -1,3 +1,4 @@
+import copy
 from random import random
 
 from core.audio.constants import ticks_to_ms
@@ -140,7 +141,7 @@ class Waltz(Song):
         for i in range(len(chord)):
             chord[i] += value
         acc = ACCOMPANIMENTS['waltz']
-        chord_map = acc[int(25 * self.chaos * random()) % len(acc)]
+        chord_map = copy.deepcopy(acc[int(25 * self.chaos * random()) % len(acc)])
         for x in range(len(chord_map)):
             for y in range(len(chord_map[x])):
                 chord_map[x][y] = chord[chord_map[x][y]] + inst.offset
