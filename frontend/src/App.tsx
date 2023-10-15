@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { makeRequest } from './api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faChevronDown, faChevronUp, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { Wave } from '@foobar404/wave';
 import './App.css';
 
 /*function getAudioStream(audio: HTMLAudioElement) {
@@ -96,8 +97,13 @@ function App() {
   const [tempo, setTempo] = useState(60);
   const [chaosFactor, setChaosFactor] = useState(0);
 
-  const [audio, setAudio] = useState(new Audio('https://github.com/prof3ssorSt3v3/media-sample-files/raw/master/fight-club.mp3'));
+  const _audio = new Audio('http://localhost:5000/static/fight-club.mp3');
+  _audio.crossOrigin = 'anonymous';
+
+  const [audio, setAudio] = useState(_audio);
   const [playing, setPlaying] = useState(false);
+
+  const visualizerCanvas = useRef<HTMLCanvasElement>(null);
 
   const toggle: () => void = () => setPlaying(!playing);
 
@@ -113,6 +119,13 @@ function App() {
       audio.removeEventListener('ended', () => setPlaying(false));
     };
   }, []);
+
+  useEffect(() => {
+    if (audio && visualizerCanvas.current) {
+      const wave = new Wave(audio, visualizerCanvas.current);
+      wave.addAnimation(new wave.animations.Wave());
+    }
+  }, [audio])
 
   function onLetsGoClicked() {
     makeRequest({
@@ -158,7 +171,7 @@ function App() {
         </div>
         <div className='flex-1 p-4 pl-2'>
           <Tile className='flex-col'>
-            {/*recorder && <LiveAudioVisualizer mediaRecorder={recorder} />*/}
+            <canvas ref={visualizerCanvas}></canvas>
             <div>
               <div/>
               <button className='w-12 h-12 bg-pink-500 rounded-full' onClick={toggle as () => void}>
