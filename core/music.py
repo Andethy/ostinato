@@ -68,7 +68,7 @@ class Waltz(Song):
         while not flag:
             response1_pre = self.responder.get_response('ost1')
             response1_post = self.prompter.parse_prompt_by_name('ost1', response1_pre)
-            print("OSTINATO RESPONSE:", response1_post)
+            print("GPT RESPONSE:", response1_post)
             if len(response1_post.split('|')) == 6:
                 flag = True
                 response1 = response1_post

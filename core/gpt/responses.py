@@ -11,17 +11,14 @@ class Responder:
         self.__key = os.getenv('GPT_API_KEY') if key is None else key
 
     def get_response(self, prompt):
-        try:
-            response = openai.Completion.create(
-                engine="text-davinci-003",  # for GPT-3.5 Turbo, use "text-davinci-003"
-                prompt=self.prompter.get_prompt_by_name(prompt),
-                max_tokens=MAX_TOKENS
-            )
-            message = response.choices[0].text.strip()
-            return message
-        except Exception as e:
-            # Handle exceptions as appropriate for your use case.
-            return str(e)
+        response = openai.Completion.create(
+            engine="text-davinci-003",  # for GPT-3.5 Turbo, use "text-davinci-003"
+            prompt=self.prompter.get_prompt_by_name(prompt),
+            max_tokens=MAX_TOKENS
+        )
+        message = response.choices[0].text.strip()
+        return message
+
 
 
 if __name__ == '__main__':
