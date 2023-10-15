@@ -3,8 +3,6 @@ import os
 from core.gpt.prompts import *
 import openai
 
-from midi.constants import TONICS_STR
-
 
 class Responder:
 
@@ -28,7 +26,7 @@ class Responder:
 
 if __name__ == '__main__':
     pm = PromptManager()
-    pm.prompts['ostinato'] = OstinatoPrompt('F', 'sad', 6)
+    pm.prompts['ostinato'] = OstinatoPrompt('F', 'dramatic', 6)
     r = Responder(pm)
 
     r1 = r.get_response('ostinato')

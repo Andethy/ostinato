@@ -31,16 +31,22 @@ class PercussiveInstrument(Instrument):
 class HighStringsPizzicato(MelodicInstrument):
 
     def __init__(self):
-        super().__init__("high_strings", MID_OFFSET, 'sounds/high_strings/pizzicato/')
+        super().__init__("high_strings_pizz", MID_OFFSET, 'sounds/high_strings/pizzicato/')
 
 
 class HighStringsStaccato(MelodicInstrument):
 
     def __init__(self):
-        super().__init__("high_strings", MID_OFFSET, 'sounds/high_strings/staccato/')
+        super().__init__("high_strings_stac", MID_OFFSET, 'sounds/high_strings/staccato/')
 
 
 class LowStringsStaccato(MelodicInstrument):
 
     def __init__(self):
-        super().__init__("low_strings", BASS_OFFSET, 'sounds/low_strings/staccato/')
+        super().__init__("low_strings_stac", BASS_OFFSET, 'sounds/low_strings/staccato/')
+
+
+class LowStringsPizzicato(MelodicInstrument):
+
+    def __init__(self):
+        super().__init__("low_strings_pizz", BASS_OFFSET, 'sounds/low_strings/pizzicato/')

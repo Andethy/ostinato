@@ -43,9 +43,17 @@ class MP3File:
     def export_file(self, path):
         base = AudioSegment.silent(self.length)
         for stem in self.stems:
-            stem.audio.apply_gain(24.)
+            # if "high" in stem.name:
+            #     print("INCR HIGH GAIN")
+            #     stem.audio = stem.audio.apply_gain(12.)
+            if "pizz" in stem.name:
+                print("INCR PIZZ GAIN")
+                stem.audio = stem.audio.apply_gain(3.)
+            if "low" in stem.name:
+                print("DECR LOW GAIN")
+                stem.audio = stem.audio.apply_gain(-4.5)
             base = base.overlay(stem.audio, 0)
-        base.apply_gain(18.0)
+
         play(base)
         self.name = self.name + datetime.now().strftime("-%Y_%m_%d-%H_%M_%S-") + str(random.randint(10, 100))
         self.path = path + f'/{self.name}.mp3'

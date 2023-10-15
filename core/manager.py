@@ -17,6 +17,7 @@ class CoreManager:
         """
         if genre == 'waltz':
             self.song = Waltz(key_signature, emotion, tempo, chaos_factor) #waltz takesgpt api keytracks, key and tempo for now.
+            self.song.compose()
             return 0
         return -1
     
@@ -43,4 +44,4 @@ class CoreManager:
         if not self.song.song_complete:
             return Path()
 
-        return Path()
+        return self.song.midFile.path

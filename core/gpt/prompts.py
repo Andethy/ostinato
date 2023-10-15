@@ -95,4 +95,4 @@ class PromptManager:
 
 
 if __name__ == '__main__':
-    p1 = OstinatoPrompt('F', 'sad', 6)
+    p1 = OstinatoPrompt('F', 'dramatic', 6)

@@ -1,9 +1,11 @@
+from random import random
+
 from core.audio.constants import ticks_to_ms
 from core.audio.file import MP3File
 from core.constants import PATH_TO_MID, PATH_TO_MP3
 from core.gpt.prompts import *
 from core.gpt.responses import Responder
-from core.instruments import HighStringsPizzicato, LowStringsStaccato, HighStringsStaccato
+from core.instruments import HighStringsPizzicato, LowStringsStaccato, HighStringsStaccato, LowStringsPizzicato
 from core.midi.score import Score, Measure
 from core.midi.constants import *
 from core.midi.file import MIDIFile
@@ -19,12 +21,12 @@ class Song:
         self.tracks = tracks
         self.score = Score()
         self.midFile = MIDIFile(num_tracks=len(tracks))
-        self.mp3File = MP3File(length=track_length + 5000)
+        self.mp3File = MP3File(length=track_length + 1500)
         self.prompter = PromptManager()
         self.responder = Responder(self.prompter)
         self.song_complete = False
 
-    def compose_song(self):
+    def compose(self):
         pass
 
     def write_ostinato(self):
@@ -36,15 +38,19 @@ class Waltz(Song):
     # self.song = Waltz(key_signature, emotion, tempo, chaos_factor) #waltz takesgpt api keytracks, key and tempo for now.
     def __init__(self, root, emotion, tempo, chaos=0.5, *args, **kwargs):
         self.measures = 8
-        inst1 = HighStringsStaccato() if chaos > 0.5 else HighStringsPizzicato()
-        if chaos > 0.75:
+        inst1 = HighStringsStaccato() if chaos + random() * 0.5 > 1. else HighStringsPizzicato()
+        inst2 = LowStringsStaccato() if chaos + random() * 0.5 > 1.25 else LowStringsPizzicato()
+        if chaos + random() > 0.8:
             inst1.offset += 12
+        if chaos + random() > 1.1:
+            inst2.offset -= 12
+
         super().__init__(root, emotion, tempo, chaos,
                          (inst1, LowStringsStaccato()), ticks_to_ms(self.measures * 3, tempo))
 
-    def compose_song(self):
+    def compose(self):
         self.compose_track1(0)
-        # self.compose_track2(1)
+        self.compose_track2(1)
         self.midFile.add_notes(self.score())
         self.midFile.save_file(PATH_TO_MID)
         self.mp3File.add_samples(self.score(), self.tracks, self.tempo)
@@ -81,21 +87,12 @@ class Waltz(Song):
         self.midFile.add_tracks([self.score.get_last_track()])
         self.mp3File.add_tracks([self.score.get_last_track()])
 
-        self.prompter.prompts['ost1'] = OstinatoPrompt(self.root, self.emotion, 6)
-        flag = False
-        response1 = None
-        while not flag:
-            response1_pre = self.responder.get_response('ost1')
-            response1_post = self.prompter.parse_prompt_by_name('ost1', response1_pre)
-            print("OSTINATO RESPONSE:", response1_post)
-            if len(response1_post.split('|')) == 6:
-                flag = True
-                response1 = response1_post
-        print(response1)
-        ost1 = self.make_ostinato(inst, response1)
+        # self.prompter.prompts['ch1'] = Prompt(self.root, self.emotion, 6)
 
-        print(ost1)
-        measures = Measure.create_duplicate_measures(ost1, 8)
+        ch1 = self.make_chord(inst, self.root + 'm' if self.emotion == 'dramatic' else self.root)
+
+        print(ch1)
+        measures = Measure.create_duplicate_measures(ch1, 8)
         print("NOTES: ", measures[1].get_notes())
         self.score.add_to_track(inst.name, measures)
         print(self.score())
@@ -131,26 +128,27 @@ class Waltz(Song):
             #         ostinato_notes[len(ostinato_notes) - 1] -= 12
         return ostinato_notes
 
-    @staticmethod
-    def make_chord(inst, notes):
-        chord = HARMONIES["major-triad"]
-        if "m" in notes:
-            chord = HARMONIES["minor-triad"]
-            notes = notes[:-1]
+    def make_chord(self, inst, root):
+
+        chord = HARMONIES['major-triad']
+        if "m" in root:
+            chord = HARMONIES['minor-triad']
+            root = root[:-1]
         chord = list(chord)
-        value = TONICS_STR[notes]
+        value = TONICS_STR[root]
         for i in range(len(chord)):
             chord[i] += value
-        chord_map = [[0], [], [1, 2], [], [1, 2], []]
+        acc = ACCOMPANIMENTS['waltz']
+        chord_map = acc[int(25 * self.chaos * random()) % len(acc)]
         for x in range(len(chord_map)):
             for y in range(len(chord_map[x])):
-                chord_map[x][y] = chord[chord_map[x][y]]
-        print(chord_map)
+                chord_map[x][y] = chord[chord_map[x][y]] + inst.offset
+        return chord_map
 
     def create_section(self):
         pass
 
 
 if __name__ == '__main__':
-    waltz = Waltz("G#", "sad", 132, 0.8)
-    waltz.compose_song()
+    waltz = Waltz("F#", "happy", 90, 0.45)
+    waltz.compose()

@@ -4,4 +4,4 @@ END_MARKERS = '{}'
 STANDARD_FORMAT = '{[note]|[note]|...}'
 STANDARD_REST = 'X'
 MAX_TOKENS = 100
-EMOTION_PARSER = {'happy': 'major', 'sad': 'minor'}
+EMOTION_PARSER = {'happy': 'major', 'dramatic': 'minor'}
