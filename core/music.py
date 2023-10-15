@@ -30,9 +30,7 @@ class Waltz(Song):
         super().__init__(key, tempo, 0.5, (HighStrings(), LowStrings()))
 
     def compose_track(self, instrument):
-        instru = self.tracks[0]
-        offset = instru.offset
-        print(offset)
+        offset = INST_DICT[instrument]
         track_name = "E|F#|G|B|E|X"
         trackname = track_name.split('|')
         print(trackname)
@@ -44,19 +42,25 @@ class Waltz(Song):
                     i+=1
                     count = count + 1
                 if trackname[i] != "X":
-                    track.append(TONICS_STR[trackname[i]] * count)
-                    print(TONICS_STR[trackname[i]])
-                
+                    track.append((TONICS_STR[trackname[i]]+offset) * count)
+                    print(TONICS_STR[trackname[i]])     
             else:
                 count = count + 1
                 if trackname[i] != "X":
-                    track.append(TONICS_STR[trackname[i]] * count)
-                
+                    track.append((TONICS_STR[trackname[i]]+offset) * count)
+               
         print(track)
-    compose_track("self", "asd")
+    compose_track("self", "high_strings")
 
-    def write_ostinato(self):
+    def make_ostinato(self):
         pass
 
+    def make_chord(self, note):
+        chord = HARMONIES["major-triad"]
+        if m in note:
+            chord = HARMONIES["minor-triad"] 
+            note=note[:-1]
+        value = TONICS_STR[]
+    
     def create_section(self):
         pass
