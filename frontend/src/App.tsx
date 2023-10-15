@@ -171,7 +171,7 @@ function App() {
         </div>
         <div className='flex-1 p-4 pl-2'>
           <Tile className='flex-col'>
-            <canvas ref={visualizerCanvas}></canvas>
+            <canvas ref={visualizerCanvas} className='w-full rounded m-2'></canvas>
             <div>
               <div/>
               <button className='w-12 h-12 bg-pink-500 rounded-full' onClick={toggle as () => void}>
