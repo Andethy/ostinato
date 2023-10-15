@@ -53,7 +53,7 @@ class MP3File:
                 print("DECR LOW GAIN")
                 stem.audio = stem.audio.apply_gain(-4.5)
             base = base.overlay(stem.audio, 0)
-
+        base = base.apply_gain(4.5)
         # play(base)
         self.name = self.name + datetime.now().strftime("-%Y_%m_%d-%H_%M_%S-") + str(random.randint(10, 100))
         self.path = path + f'{self.name}.mp3'
