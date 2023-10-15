@@ -1,5 +1,4 @@
 import math
-from copy import copy
 
 from core.midi.entities import *
 from core.midi.constants import *
@@ -113,12 +112,9 @@ class Track:
 
     def sync_notes_to_track(self, beats):
         for index, measure in enumerate(self._measures):
-            print("MEASURE", index, "|",index * beats)
             for note in measure.get_notes():
                 note.assign_track(self.index)
-                print("--OLD",note.time)
                 note.offset_position(index * beats)
-                print("--NEW",note.time)
 
     def get_measures(self):
         return self._measures
@@ -137,6 +133,9 @@ class Score:
 
     def get_tracks(self):
         return self._tracks
+
+    def get_last_track(self):
+        return self._tracks[len(self._tracks) - 1]
 
     def add_to_track(self, track_name, measures):
         track = None

@@ -1,4 +1,4 @@
 
 
 def ticks_to_ms(tick, bpm):
-    return tick * bpm / 60 * 1000
+    return tick * 60 / bpm * 1000

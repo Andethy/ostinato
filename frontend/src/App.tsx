@@ -71,11 +71,11 @@ function Dropdown({ items, onChange }: {items: string[], onChange?: (index: numb
   );
 }
 
-function Slider({ min, max, step, onChange }: {min: number, max: number, step: number, onChange?: (value: number) => void}) {
+function Slider({ className, min, max, step, onChange }: {className?: string, min: number, max: number, step: number, onChange?: (value: number) => void}) {
   const rangeInput = useRef<HTMLInputElement>(null);
 
   return (
-    <div className='-mt-2'>
+    <div className={'-mt-1 mr-2 ' + (className || '')}>
       <input ref={rangeInput} className='appearance-none w-full h-1 bg-gray-300 outline-none rounded [&::-moz-range-thumb]:bg-blue-600 [&::-moz-range-thumb]:rounded-full' type='range' min={min} max={max} step={step} onChange={() => {
         if (onChange) {
           onChange(rangeInput.current ? parseFloat(rangeInput.current.value) : min);
@@ -143,34 +143,40 @@ function App() {
         <h1 className='font-bold text-xl'>ostinato</h1>
         <div/>
       </div>
-      <div className='flex flex-col md:flex-row w-3/5 m-auto'>
-        <div className='flex-1 p-4 pr-2'>
+      <div className='flex flex-col-reverse md:flex-row w-full md:w-3/5 m-auto'>
+        <div className='flex-1 p-4 md:pr-2'>
           {/*<Tile>
             <div>Genre</div>
             <Dropdown items={genres} onChange={index => setGenreIndex(index)} />
           </Tile>*/}
           <DropdownTile label='Genre' items={genres} onChange={index => setGenreIndex(index)} />
           <Tile>
-            <div className='font-bold'>Tempo</div>
-            <Slider min={60} max={180} step={1} onChange={value => setTempo(value)} />
+            <div className='font-bold flex-1'>Tempo</div>
+            <div className='flex-1 flex'>
+              <Slider className='flex-1' min={60} max={180} step={1} onChange={value => setTempo(value)} />
+              <div className='w-12 text-center'>{tempo}</div>
+            </div>
           </Tile>
           <Tile>
-            <div className='font-bold'>Chaos factor</div>
-            <Slider min={0} max={1} step={0.001} onChange={value => setChaosFactor(value)} />
+            <div className='font-bold flex-1'>Chaos factor</div>
+            <div className='flex-1 flex'>
+              <Slider className='flex-1' min={0} max={1} step={0.001} onChange={value => setChaosFactor(value)} />
+              <div className='w-12 text-center'>{chaosFactor}</div>
+            </div>
           </Tile>
           <DropdownTile label='Key signature' items={keySigs} onChange={index => setKeySigIndex(index)} />
           <DropdownTile label='Emotion' items={emotions} onChange={index => setEmotionIndex(index)} />
           <div className='flex flex-row justify-between'>
             <div/>
-            <button className='bg-green-300 rounded-full p-4' onClick={onLetsGoClicked}>
+            <button className='bg-green-300 rounded-full p-4 w-full md:w-auto' onClick={onLetsGoClicked}>
               Let's go
               <FontAwesomeIcon className='ml-2' icon={faArrowRight} />
             </button>
           </div>
           {/*<button onClick={() => alert(genres[genreIndex] + ' ' + keySigs[keySigIndex] + ' ' + tempo + ' ' + chaosFactor)}>show params</button>*/}
         </div>
-        <div className='flex-1 p-4 pl-2'>
-          <Tile className='flex-col'>
+        <div className='flex-1 p-4 pb-0 md:pl-2'>
+          <Tile className='flex-col mb-0'>
             <canvas ref={visualizerCanvas} className='w-full rounded m-2'></canvas>
             <div>
               <div/>
