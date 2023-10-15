@@ -3,18 +3,18 @@ from core.gpt.responses import Responder
 from core.instruments import HighStrings, LowStrings
 from core.midi.score import Score
 from midi.constants import *
-from instruments import *
 
 class Song:
 
-    def __init__(self, key, tempo, chaos, tracks, gpt_api_key=None):
+    def __init__(self, root, emotion, tempo, chaos, tracks, gpt_api_key=None):
         self.tempo = tempo
-        self.key = key
+        self.root = root
+        self.emotion = emotion
         self.chaos = chaos
         self.tracks = tracks
         self.score = Score()
-        self.prompts = PromptManager()
-        self.responder = Responder(self.prompts)
+        self.prompter = PromptManager()
+        self.responder = Responder(self.prompter)
         self.song_complete = False
 
     def compose_track(self, track_name):
@@ -26,39 +26,43 @@ class Song:
 
 class Waltz(Song):
 
-    def __init__(self, key, tempo, *args, **kwargs):
-        super().__init__(key, tempo, 0.5, (HighStrings(), LowStrings()))
+    def __init__(self, root, emotion, tempo, *args, **kwargs):
+        super().__init__(root, emotion, tempo, 0.5, (HighStrings(), LowStrings()))
 
-    def compose_track(self, instrument):
-        offset = INST_DICT[instrument]
-        track_name = "E|F#|G|B|E|X"
-        trackname = track_name.split('|')
-        print(trackname)
+    def compose_track(self, inst_index):
+        self.prompter.prompts['ost1'] = OstinatoPrompt(self.root, self.emotion, 6)
+        response1_pre = self.responder.get_response('ost1')
+        response1_post = self.prompter.parse_prompt_by_name('ost1', response1_pre)
+        print("OSTINATO RESPONSE:", response1_post)
+        self.make_ostinato(inst_index, response1_post)
+
+    def make_ostinato(self, inst_index, notes):
+        inst = self.tracks[inst_index]
+        offset = inst.offset
+        notes_split = notes.split('|')
+        print(notes_split)
         track = []
-        for i in range(len(trackname)):
+        for i in range(len(notes_split)):
             count = 1
-            if i!= len(trackname)-1:
-                while trackname[i] == trackname[i+1]:
-                    i+=1
-                    count = count + 1
-                if trackname[i] != "X":
-                    track.append((TONICS_STR[trackname[i]]+offset) * count)
-                    print(TONICS_STR[trackname[i]])     
+            track.append([])
+            if i != len(notes_split) - 1:
+                while notes_split[i] == notes_split[i + 1]:
+                    i += 1
+                    # count = count + 1
+                if notes_split[i] != "X":
+                    track[len(track) - 1].append((TONICS_STR[notes_split[i]] + offset))
+                    print(TONICS_STR[notes_split[i]])
             else:
-                count = count + 1
-                if trackname[i] != "X":
-                    track.append((TONICS_STR[trackname[i]]+offset) * count)
-               
-        print(track)
-    #compose_track("self", "high_strings")
+                # count = count + 1
+                if notes_split[i] != "X":
+                    track[len(track) - 1].append((TONICS_STR[notes_split[i]] + offset))
 
-    def make_ostinato(self):
-        pass
+        print(track)
 
     def make_chord(self, note):
         chord = HARMONIES["major-triad"]
         if "m" in note:
-            chord = HARMONIES["minor-triad"] 
+            chord = HARMONIES["minor-triad"]
             note=note[:-1]
         chord = list(chord)
         value = TONICS_STR[note]
@@ -66,14 +70,14 @@ class Waltz(Song):
             chord[i] += value
         placeholder= [[0],[],[1,2],[],[1,2],[]]
         for x in range(len(placeholder)):
-            if placeholder[x] != []:
-                for y in range(len(placeholder[x])):
-                    placeholder[x][y] = chord[placeholder[x][y]]
+            for y in range(len(placeholder[x])):
+                placeholder[x][y] = chord[placeholder[x][y]]
         print(placeholder)
     
     def create_section(self):
         pass
 
-    if __name__ == '__main__' :
-        pass
 
+if __name__ == '__main__':
+    waltz = Waltz("E","sad", 120)
+    waltz.compose_track(0)

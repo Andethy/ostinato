@@ -1,4 +1,4 @@
-from constants import *
+from core.midi.constants import *
 
 
 class Note:

@@ -39,6 +39,11 @@ INST_DICT= {
     "high_strings": MID_OFFSET,
     "low_strings": BASS_OFFSET }
 
+ACCOMPANIMENTS = {"waltz": ([[0], [], [1, 2], [], [1, 2], []],
+                            [[0], [], [2], [1], [2], []],
+                            [[0], [], [2], [1], [2], []],
+                            [[0], [], [1, 2], [], [1], []])}
+
 def get_key_notes(root, scale):
     root_int = TONICS_STR[root]
     scale_int = SCALES[scale]
