@@ -1,6 +1,6 @@
 TONICS_STR = {b: a for a, b in enumerate(('C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'))}
 TONICS_INT = {a: b for a, b in enumerate(('C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'))}
-print(TONICS_STR)
+
 SCALES = {
     "major": (0, 2, 4, 5, 7, 9, 11),
     "ionian": (0, 2, 4, 5, 7, 9, 11),
