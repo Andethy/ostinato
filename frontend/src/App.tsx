@@ -94,7 +94,8 @@ function App() {
       tempo: tempo,
       genre: genres[genreIndex],
       key_signature: keySigs[keySigIndex],
-      chaos_factor: chaosFactor
+      chaos_factor: chaosFactor,
+      emotion: emotions[emotionIndex]
     });
   }
 

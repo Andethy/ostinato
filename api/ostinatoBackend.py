@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 
-from core.manager import CoreManager
+#from core.manager import CoreManager
 
 app = Flask(__name__)
+CORS(app)
 
 #acting as a database.
 data_storage = []
@@ -13,6 +15,7 @@ def home():
 @app.route('/ostinato_home', methods=['POST'])
 def ostinato_home():
     form_data = request.form #request.form is basically a dictionary/hash map object
+    print(form_data)
     tempo = int(form_data.get('tempo'))
     genre = form_data.get('genre')
     chaos_factor = float(form_data.get('chaos_factor'))
@@ -32,7 +35,7 @@ def ostinato_home():
     print()
     print(data_storage)
 
-    core_instance = CoreManager()
+    #core_instance = CoreManager()
 
     # Return a response
     return jsonify({'message': 'Form data received successfully'}), 200
