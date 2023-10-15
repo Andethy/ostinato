@@ -25,6 +25,12 @@ function DropdownTile({ label, items, onChange }: {label: string, items: string[
   const [expanded, setExpanded] = useState(false);
   const [index, setIndex] = useState(0);
 
+  useEffect(() => {
+    if (onChange) {
+      onChange(index);
+    }
+  }, [index]);
+
   function onItemClick(index: number) {
     setIndex(index);
     //setExpanded(false);
@@ -135,6 +141,7 @@ function App() {
   }, [audio])
 
   function onLetsGoClicked() {
+    setPlaying(false);
     makeRequest({
       tempo: tempo,
       genre: genres[genreIndex].toLowerCase(),
