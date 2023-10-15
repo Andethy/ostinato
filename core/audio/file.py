@@ -18,7 +18,7 @@ class MP3Stem:
 
     def encode_sample(self, note, instrument, tempo):
         path = instrument.get_sample_path(note.value)
-        sound = AudioSegment.from_mp3(os.path.join(find_root_folder('resources', os.getcwd(), 0).replace('api/', ''), path))
+        sound = AudioSegment.from_mp3(os.path.join(find_root_folder('resources', os.getcwd(), 0).replace('api/', '').replace('core/', ''), path))
         self.audio = self.audio.overlay(sound, ticks_to_ms(note.time, tempo))
 
 
@@ -56,5 +56,5 @@ class MP3File:
 
         play(base)
         self.name = self.name + datetime.now().strftime("-%Y_%m_%d-%H_%M_%S-") + str(random.randint(10, 100))
-        self.path = path + f'/{self.name}.mp3'
+        self.path = path + f'{self.name}.mp3'
         base.export(self.path)

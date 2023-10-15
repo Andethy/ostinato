@@ -25,7 +25,7 @@ class Song:
         self.midFile = MIDIFile(num_tracks=len(tracks))
         self.mp3File = MP3File(length=track_length + 1500)
         self.prompter = PromptManager()
-        self.responder = Responder(self.prompter, None)
+        self.responder = Responder(self.prompter)
         self.song_complete = False
 
     def compose(self):
@@ -154,5 +154,5 @@ class Waltz(Song):
 
 
 if __name__ == '__main__':
-    waltz = Waltz("F#", "happy", 90, 0.45)
+    waltz = Waltz("F#", "happy", 180, 0.45)
     waltz.compose()
