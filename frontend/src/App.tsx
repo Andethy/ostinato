@@ -86,9 +86,9 @@ function Slider({ className, min, max, step, onChange }: {className?: string, mi
 }
 
 function App() {
-  const genres = ['Waltz', 'Hello', 'World'];
+  const genres = ['Waltz'];
   const keySigs = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-  const emotions = ['Happy', 'Sad']
+  const emotions = ['Happy', 'Dramatic']
 
   const [genreIndex, setGenreIndex] = useState(0);
   const [keySigIndex, setKeySigIndex] = useState(0);
@@ -128,8 +128,9 @@ function App() {
 
   useEffect(() => {
     if (audio && visualizerCanvas.current) {
+      const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       const wave = new Wave(audio, visualizerCanvas.current);
-      wave.addAnimation(new wave.animations.Wave());
+      wave.addAnimation(new wave.animations.Wave({ fillColor: dark ? '#fff' : '#000', lineColor: dark ? '#fff' : '#000' }));
     }
   }, [audio])
 
