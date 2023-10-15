@@ -2,7 +2,7 @@ from pathlib import Path
 
 from midiutil import MIDIFile as Midi
 
-from midi.score import Track
+from core.midi.score import Track
 
 
 class MIDIFile:

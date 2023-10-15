@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from core.midi.constants import *
 from core.constants import *
 

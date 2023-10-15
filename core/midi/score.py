@@ -1,5 +1,4 @@
 import math
-from copy import copy
 
 from core.midi.entities import *
 from core.midi.constants import *
