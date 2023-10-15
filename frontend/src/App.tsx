@@ -128,8 +128,9 @@ function App() {
 
   useEffect(() => {
     if (audio && visualizerCanvas.current) {
+      const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       const wave = new Wave(audio, visualizerCanvas.current);
-      wave.addAnimation(new wave.animations.Wave());
+      wave.addAnimation(new wave.animations.Wave({ fillColor: dark ? '#fff' : '#000', lineColor: dark ? '#fff' : '#000' }));
     }
   }, [audio])
 

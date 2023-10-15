@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const bodyElem = document.querySelector('body');
-if (bodyElem) bodyElem.className = 'bg-gray-950';
+if (bodyElem) bodyElem.className = 'dark:bg-gray-950';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
