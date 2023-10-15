@@ -97,10 +97,7 @@ function App() {
   const [tempo, setTempo] = useState(60);
   const [chaosFactor, setChaosFactor] = useState(0);
 
-  const _audio = new Audio('http://localhost:5000/static/fight-club.mp3');
-  _audio.crossOrigin = 'anonymous';
-
-  const [audio, setAudio] = useState(_audio);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
 
   const visualizerCanvas = useRef<HTMLCanvasElement>(null);
@@ -108,17 +105,26 @@ function App() {
   const toggle: () => void = () => setPlaying(!playing);
 
   useEffect(() => {
-      playing ? audio.play() : audio.pause();
+    if (audio) {
+      audio.addEventListener('ended', () => setPlaying(false));
+      setPlaying(true);
+    } else {
+      setPlaying(false);
+    }
+  }, [audio])
+
+  useEffect(() => {
+      audio && (playing ? audio.play() : audio.pause());
     },
     [playing]
   );
 
-  useEffect(() => {
+  /*useEffect(() => {
     audio.addEventListener('ended', () => setPlaying(false));
     return () => {
       audio.removeEventListener('ended', () => setPlaying(false));
     };
-  }, []);
+  }, []);*/
 
   useEffect(() => {
     if (audio && visualizerCanvas.current) {
@@ -134,7 +140,12 @@ function App() {
       key_signature: keySigs[keySigIndex],
       chaos_factor: chaosFactor,
       emotion: emotions[emotionIndex]
-    });
+    }).then(json => {
+      const audio = new Audio(json.path);
+      audio.crossOrigin = 'anonymous';
+      audio.loop = true;
+      setAudio(audio);
+    })
   }
 
   return (
@@ -168,7 +179,7 @@ function App() {
           <DropdownTile label='Emotion' items={emotions} onChange={index => setEmotionIndex(index)} />
           <div className='flex flex-row justify-between'>
             <div/>
-            <button className='bg-green-300 text-black rounded-full p-4 w-full md:w-auto' onClick={onLetsGoClicked}>
+            <button className='bg-green-300 text-black rounded-full p-4 mt-4 w-full md:w-auto' onClick={onLetsGoClicked}>
               Let's go
               <FontAwesomeIcon className='ml-2' icon={faArrowRight} />
             </button>
