@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
-#from core.manager import CoreManager
+from core.manager import CoreManager
 
 app = Flask(__name__)
 CORS(app)
@@ -35,7 +35,8 @@ def ostinato_home():
     print()
     print(data_storage)
 
-    #core_instance = CoreManager()
+    core_instance = CoreManager()
+    core_instance.pass_request(tempo, genre, chaos_factor, key_signature, emotion)
 
     # Return a response
     return jsonify({'message': 'Form data received successfully'}), 200
