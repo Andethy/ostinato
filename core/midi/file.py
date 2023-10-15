@@ -6,7 +6,7 @@ from midi.score import Track
 
 
 class MIDIFile:
-    def __init__(self, name='test', num_tracks=1):
+    def __init__(self, name='output', num_tracks=1):
         self.name = name
         self.file = Midi(num_tracks)
 
@@ -32,7 +32,7 @@ class MIDIFile:
 
     def save_file(self, file_path):
         # full_path = Path(file_path, 'output.midi') if '.' not in file_path else file_path
-        full_path = file_path + 'output.mid'
+        full_path = file_path + name + '.mid'
         with open(full_path, "wb") as out:
             self.file.writeFile(out)
 
