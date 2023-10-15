@@ -106,6 +106,8 @@ function App() {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
 
+  const [trans, setTrans] = useState(false);
+
   const visualizerCanvas = useRef<HTMLCanvasElement>(null);
 
   const toggle: () => void = () => setPlaying(!playing);
@@ -142,6 +144,7 @@ function App() {
 
   function onLetsGoClicked() {
     setPlaying(false);
+    setTrans(true);
     makeRequest({
       tempo: tempo,
       genre: genres[genreIndex].toLowerCase(),
@@ -149,6 +152,7 @@ function App() {
       chaos_factor: chaosFactor,
       emotion: emotions[emotionIndex].toLowerCase()
     }).then(json => {
+      setTrans(false);
       const audio = new Audio(process.env.REACT_APP_BACKEND_URL + '/static/' + json.path);
       audio.crossOrigin = 'anonymous';
       audio.loop = true;
@@ -187,7 +191,7 @@ function App() {
           <DropdownTile label='Emotion' items={emotions} onChange={index => setEmotionIndex(index)} />
           <div className='flex flex-row justify-between'>
             <div/>
-            <button className='bg-green-300 text-black rounded-full p-4 mt-4 w-full md:w-auto' onClick={onLetsGoClicked}>
+            <button className={'bg-green-300 text-black rounded-full p-4 mt-4 w-full md:w-auto ' + (trans ? 'animate-pulse' : '')} onClick={onLetsGoClicked}>
               Let's go
               <FontAwesomeIcon className='ml-2' icon={faArrowRight} />
             </button>
