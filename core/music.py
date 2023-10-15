@@ -1,15 +1,17 @@
-from constants import PATH_TO_MID
+from core.audio.constants import ticks_to_ms
+from core.audio.file import MP3File
+from core.constants import PATH_TO_MID
 from core.gpt.prompts import *
 from core.gpt.responses import Responder
 from core.instruments import HighStrings, LowStrings
 from core.midi.score import Score, Measure
-from midi.constants import *
-from midi.file import MIDIFile
+from core.midi.constants import *
+from core.midi.file import MIDIFile
 
 
 class Song:
 
-    def __init__(self, root, emotion, tempo, chaos, tracks, gpt_api_key=None):
+    def __init__(self, root, emotion, tempo, chaos, tracks, track_length, gpt_api_key=None):
         self.tempo = tempo
         self.root = root
         self.emotion = emotion
@@ -17,7 +19,7 @@ class Song:
         self.tracks = tracks
         self.score = Score()
         self.midFile = MIDIFile(len(tracks))
-        self.mp3File = None  # TODO
+        self.mp3File = MP3File(length=track_length + 5000)
         self.prompter = PromptManager()
         self.responder = Responder(self.prompter)
         self.song_complete = False
@@ -33,7 +35,9 @@ class Waltz(Song):
     #manager.py line 19 passes in the following arguments to the Waltz constructor.
     #self.song = Waltz(key_signature, emotion, tempo, chaos_factor) #waltz takesgpt api keytracks, key and tempo for now.
     def __init__(self, root, emotion, tempo, chaos=0.5, *args, **kwargs): 
-        super().__init__(root, emotion, tempo, chaos, (HighStrings(), LowStrings()))
+        self.measures = 8
+        super().__init__(root, emotion, tempo, chaos,
+                         (HighStrings(), LowStrings()), ticks_to_ms(self.measures * 3, tempo))
 
     def compose_track(self, inst_index):
         inst = self.tracks[inst_index]
@@ -54,7 +58,7 @@ class Waltz(Song):
         ost1 = self.make_ostinato(inst, response1)
 
         print(ost1)
-        measures = Measure.create_duplicate_measures(ost1, 8)
+        measures = Measure.create_duplicate_measures(ost1, 16)
         print("NOTES: ", measures[1].get_notes())
         self.score.add_to_track(inst.name, measures)
         for measure in self.score.get_tracks()[0].get_measures():
@@ -64,8 +68,8 @@ class Waltz(Song):
         self.midFile.add_notes(self.score())
         self.midFile.save_file(PATH_TO_MID)
 
-
-    def make_ostinato(self, inst, notes):
+    @staticmethod
+    def make_ostinato(inst, notes):
         offset = inst.offset
         notes_split = notes.split('|')
         print(notes_split)
