@@ -1,6 +1,6 @@
 import math
-from entities import *
-from constants import *
+from core.midi.entities import *
+from core.midi.constants import *
 
 
 class KeySignature:

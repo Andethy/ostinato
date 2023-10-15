@@ -1,6 +1,7 @@
 from pathlib import Path
 from core.music import Waltz
 
+
 class CoreManager:
 
     def __init__(self):
@@ -42,4 +43,3 @@ class CoreManager:
             return Path()
 
         return Path()
-
