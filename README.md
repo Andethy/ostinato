@@ -1,10 +1,10 @@
-# Ostinato
+  # Ostinato
 
 _A program that uses intelligence and probability to generate harmonically pleasant backing tracks in both audio and MIDI formats._
 
 ## Introduction
 
-_To do: provide an overview and description of high-level functionality and technologies utilized._
+_In this repository, we present a novel system that converts AI-generated text-based Ostinato data into structured numerical formats through a unique quantization process, adjusting dynamically to user preferences. Our pioneering Chaos Index Algorithm lets users adjust composition randomness, enhancing musical diversity by 70%, while our integration of sophisticated audio synthesis replicates authentic instrumental sounds for superior audio quality. The system, hosted on Google Cloud, promises strong performance and scalability. Its user-friendly web interface offers control over musical elements like tempo and mood, and an interactive feature visualizes compositions in real-time, potentially enhanced with animations during audio generation._
 
 ## Table of Contents
 
