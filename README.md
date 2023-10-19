@@ -1,6 +1,6 @@
 # Ostinato
 
-_To do: One or two lines about what the project can do._
+_A program that uses intelligence and probability to generate harmonically pleasant backing tracks in both audio and MIDI formats._
 
 ## Introduction
 
