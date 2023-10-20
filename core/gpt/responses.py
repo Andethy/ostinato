@@ -23,7 +23,8 @@ class Responder:
 
 if __name__ == '__main__':
     pm = PromptManager()
-    pm.prompts['ostinato'] = StandardOstinatoPrompt('waltz', 'F', 'dramatic', 6, 3)
+    pm.prompts['ostinato'] = StandardOstinatoPrompt('action movie sequence', 'F', 'dramatic', 8, 4)
     r = Responder(pm)
 
     r1 = r.get_response('ostinato')
+    print(r1)
