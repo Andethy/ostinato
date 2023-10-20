@@ -35,15 +35,15 @@ class Prompt:
         pass
 
 
-class OstinatoPrompt(Prompt):
+class StandardOstinatoPrompt(Prompt):
 
     def __init__(self, tonic, emotion, num_notes):
         super().__init__(tonic, emotion, num_notes)
         self.num_notes = num_notes
         self.valid_characters = tuple(TONICS_STR.keys()) + (STANDARD_REST,)
 
-    def create_prompt(self, tonic, emotion, num_notes):
-        self.prompt.append(f'Generate 1 musical ostinato for a WALTZ in the key {tonic} {EMOTION_PARSER[emotion]} '
+    def create_prompt(self, genre: str, tonic, emotion, num_notes):
+        self.prompt.append(f'Generate 1 musical ostinato for a {genre.upper()} in the key {tonic} {EMOTION_PARSER[emotion]} '
                            f'(available notes are {get_key_notes(tonic, EMOTION_PARSER[emotion])})')
         self.prompt.append(f'This ostinato will be in the format: "{STANDARD_FORMAT}"')
         self.prompt.append(f'Separate each note with "{SEPERATOR}"')
@@ -95,4 +95,4 @@ class PromptManager:
 
 
 if __name__ == '__main__':
-    p1 = OstinatoPrompt('F', 'dramatic', 6)
+    p1 = StandardOstinatoPrompt('F', 'dramatic', 6)
