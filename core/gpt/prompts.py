@@ -37,18 +37,18 @@ class Prompt:
 
 class StandardOstinatoPrompt(Prompt):
 
-    def __init__(self, tonic, emotion, num_notes):
-        super().__init__(tonic, emotion, num_notes)
+    def __init__(self, genre, tonic, emotion, num_notes, time_sig):
+        super().__init__(genre, tonic, emotion, num_notes, time_sig)
         self.num_notes = num_notes
         self.valid_characters = tuple(TONICS_STR.keys()) + (STANDARD_REST,)
 
-    def create_prompt(self, genre: str, tonic, emotion, num_notes):
+    def create_prompt(self, genre: str, tonic, emotion, num_notes, time_sig):
         self.prompt.append(f'Generate 1 musical ostinato for a {genre.upper()} in the key {tonic} {EMOTION_PARSER[emotion]} '
                            f'(available notes are {get_key_notes(tonic, EMOTION_PARSER[emotion])})')
         self.prompt.append(f'This ostinato will be in the format: "{STANDARD_FORMAT}"')
         self.prompt.append(f'Separate each note with "{SEPERATOR}"')
         self.prompt.append(f'Do not include dashes and in place of a note put a "{STANDARD_REST}" if there is a rest')
-        self.prompt.append(f'Each note is the length of a 1/8th note')
+        self.prompt.append(f'Each note is the length of a 1/{int(num_notes / time_sig * 4)}th note')
         self.prompt.append(f'Create a total of EXACTLY {num_notes} [note]s, including rests')
 
     def parse_result(self, result: str):

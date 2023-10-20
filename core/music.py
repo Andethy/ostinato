@@ -29,7 +29,18 @@ class Song:
         self.song_complete = False
 
     def compose(self):
-        pass
+        self.midFile.add_notes(self.score())
+        self.midFile.save_file(PATH_TO_MID)
+        self.mp3File.add_samples(self.score(), self.tracks, self.tempo)
+        self.mp3File.export_file(PATH_TO_MP3)
+        self.song_complete = True
+
+    def init_track(self, inst_index):
+        inst = self.tracks[inst_index]
+        self.score.add_track(inst.name)
+        self.midFile.add_tracks([self.score.get_last_track()])
+        self.mp3File.add_tracks([self.score.get_last_track()])
+        return inst
 
     def write_ostinato(self):
         pass
@@ -100,16 +111,12 @@ class Waltz(Song):
                          (inst1, LowStringsStaccato()), ticks_to_ms(self.measures * 3, tempo))
 
     def compose(self):
-        self.compose_track1(0)
-        self.compose_track2(1)
-        self.midFile.add_notes(self.score())
-        self.midFile.save_file(PATH_TO_MID)
-        self.mp3File.add_samples(self.score(), self.tracks, self.tempo)
-        self.mp3File.export_file(PATH_TO_MP3)
-        self.song_complete = True
+        self.compose_melody(0)
+        self.compose_accompaniment(1)
+        super().compose()
 
-    def compose_track1(self, inst_index):
-        inst = self.tracks[inst_index]
+    def compose_melody(self, inst_index):
+        inst = self.init_track(inst_index)
         self.score.add_track(inst.name)
         self.midFile.add_tracks([self.score.get_last_track()])
         self.mp3File.add_tracks([self.score.get_last_track()])
@@ -133,11 +140,8 @@ class Waltz(Song):
         self.score.add_to_track(inst.name, measures)
         print(self.score())
 
-    def compose_track2(self, inst_index):
-        inst = self.tracks[inst_index]
-        self.score.add_track(inst.name)
-        self.midFile.add_tracks([self.score.get_last_track()])
-        self.mp3File.add_tracks([self.score.get_last_track()])
+    def compose_accompaniment(self, inst_index):
+        inst = self.init_track(inst_index)
 
         # self.prompter.prompts['ch1'] = Prompt(self.root, self.emotion, 6)
 
@@ -162,6 +166,12 @@ class Action(Song):
         inst2 = LowStringsStaccato()
         super().__init__(root, emotion, tempo, chaos,
                          (inst1, inst2), ticks_to_ms(self.measures * 4, tempo))
+
+    def compose(self):
+        self.compose_primary_ostinato(0)
+
+    def compose_primary_ostinato(self, inst_count):
+        self.prompter.prompts['ost1'] = StandardOstinatoPrompt("waltz", self.root, self.emotion, 6, 3)
 
 
 if __name__ == '__main__':
