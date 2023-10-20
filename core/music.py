@@ -29,6 +29,9 @@ class Song:
         self.song_complete = False
 
     def compose(self):
+        print("TRACK IDX:", )
+        for track in self.score.get_tracks():
+            print(track.index)
         self.midFile.add_notes(self.score())
         self.midFile.save_file(PATH_TO_MID)
         self.mp3File.add_samples(self.score(), self.tracks, self.tempo)
@@ -117,9 +120,6 @@ class Waltz(Song):
 
     def compose_melody(self, inst_index):
         inst = self.init_track(inst_index)
-        self.score.add_track(inst.name)
-        self.midFile.add_tracks([self.score.get_last_track()])
-        self.mp3File.add_tracks([self.score.get_last_track()])
 
         self.prompter.prompts['ost1'] = StandardOstinatoPrompt("waltz", self.root, self.emotion, 6, 3)
         flag = False
@@ -138,7 +138,7 @@ class Waltz(Song):
         measures = Measure.create_duplicate_measures(ost1, self.measures)
         print("NOTES: ", measures[1].get_notes())
         self.score.add_to_track(inst.name, measures)
-        print(self.score())
+
 
     def compose_accompaniment(self, inst_index):
         inst = self.init_track(inst_index)
