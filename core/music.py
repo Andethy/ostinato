@@ -121,7 +121,7 @@ class Waltz(Song):
         self.midFile.add_tracks([self.score.get_last_track()])
         self.mp3File.add_tracks([self.score.get_last_track()])
 
-        self.prompter.prompts['ost1'] = StandardOstinatoPrompt("waltz", self.root, self.emotion, 6)
+        self.prompter.prompts['ost1'] = StandardOstinatoPrompt("waltz", self.root, self.emotion, 6, 3)
         flag = False
         response1 = None
         while not flag:
@@ -135,7 +135,7 @@ class Waltz(Song):
         ost1 = self.make_ostinato(inst, response1)
 
         print(ost1)
-        measures = Measure.create_duplicate_measures(ost1, 8)
+        measures = Measure.create_duplicate_measures(ost1, self.measures)
         print("NOTES: ", measures[1].get_notes())
         self.score.add_to_track(inst.name, measures)
         print(self.score())
@@ -169,11 +169,29 @@ class Action(Song):
 
     def compose(self):
         self.compose_primary_ostinato(0)
+        self.compose_root_pos_acc(1)
+        super().compose()
 
     def compose_primary_ostinato(self, inst_count):
-        self.prompter.prompts['ost1'] = StandardOstinatoPrompt("waltz", self.root, self.emotion, 6, 3)
+        inst = self.init_track(inst_count)
+        self.prompter.prompts['ost_m'] = StandardOstinatoPrompt("action movie sequence", self.root, self.emotion, 8, 3)
+        flag = False
+        response1 = None
+        while not flag:
+            response1_pre = self.responder.get_response('ost_m')
+            response1_post = self.prompter.parse_prompt_by_name('ost_m', response1_pre)
+            if len(response1_post.split('|')) == 8:
+                flag = True
+                response1 = response1_post
+
+        ost1 = self.make_ostinato(inst, response1)
+        self.score.add_to_track(inst.name, Measure.create_duplicate_measures(ost1, self.measures))
+
+    def compose_root_pos_acc(self, inst_count):
+        inst = self.init_track(inst_count)
+        # Decide implementation pattern later
 
 
 if __name__ == '__main__':
-    waltz = Waltz("F#", "happy", 180, 0.45)
+    waltz = Waltz("F#", "hopeful", 180, 0.45)
     waltz.compose()
