@@ -82,7 +82,7 @@ function Slider({ className, min, max, step, onChange }: {className?: string, mi
 
   return (
     <div className={'-mt-1 mr-2 ' + (className || '')}>
-      <input ref={rangeInput} className='appearance-none w-full h-1 bg-gray-300 outline-none rounded [&::-moz-range-thumb]:bg-blue-600 [&::-moz-range-thumb]:rounded-full' type='range' min={min} max={max} step={step} onChange={() => {
+      <input ref={rangeInput} className='appearance-none w-full h-1 bg-gray-300 outline-none rounded [&::-moz-range-thumb]:bg-blue-600 [&::-moz-range-thumb]:rounded-full' type='range' min={min} max={max} step={step} defaultValue={min} onChange={() => {
         if (onChange) {
           onChange(rangeInput.current ? parseFloat(rangeInput.current.value) : min);
         }
