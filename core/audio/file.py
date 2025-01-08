@@ -1,6 +1,7 @@
 import os.path
 import random
 from datetime import datetime
+from functools import lru_cache
 
 from pydub import AudioSegment
 from pydub.playback import play
@@ -16,9 +17,14 @@ class MP3Stem:
         self.length = length
         self.audio = AudioSegment.silent(length)
 
+    @lru_cache(maxsize=None)
+    def _audio_from_mp3_path(self, path):
+        return AudioSegment.from_mp3(path)
+
     def encode_sample(self, note, instrument, tempo):
         path = instrument.get_sample_path(note.value)
-        sound = AudioSegment.from_mp3(os.path.join(find_root_folder('resources', os.getcwd(), 0).replace('api/', '').replace('core/', ''), path))
+        mp3_path = os.path.join(find_root_folder('resources', os.getcwd(), 0).replace('api/', '').replace('core/', ''), path)
+        sound = self._audio_from_mp3_path(mp3_path)
         self.audio = self.audio.overlay(sound, ticks_to_ms(note.time, tempo))
 
 

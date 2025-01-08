@@ -13,7 +13,7 @@ class Responder:
 
     def get_response(self, prompt):
         response = openai.Completion.create(
-            engine="text-davinci-003",  # for GPT-3.5 Turbo, use "text-davinci-003"
+            engine="gpt-3.5-turbo-instruct",
             prompt=self.prompter.get_prompt_by_name(prompt),
             max_tokens=MAX_TOKENS
         )
