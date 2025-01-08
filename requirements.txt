@@ -1,6 +1,6 @@
 midi2audio
 midiutil
-openai==0.28
+openai
 ffmpeg
 pydub
 pysndfx
